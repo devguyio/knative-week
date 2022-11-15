@@ -1,0 +1,12 @@
+name: mailer
+namespace: dev
+runtime: node
+image: docker.io/abd4lla/mailer:latest
+imageDigest: sha256:23bb2cacd677a346323c92fd5e06c44bac5b6860aa59afa1d20e6f64987e6433
+builder: quay.io/boson/faas-nodejs-builder:v0.8.3
+builderMap:
+  default: quay.io/boson/faas-nodejs-builder:v0.8.3
+volumes: []
+envs: []
+annotations: {}
+options: {}

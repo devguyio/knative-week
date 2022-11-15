@@ -1,0 +1,12 @@
+name: analyzer
+namespace: dev
+runtime: node
+image: docker.io/abd4lla/analyzer:latest
+imageDigest: sha256:7a66ffb286b94c16b024646ee4286b9318cf8a3aa46e63ec91d6f6f05610caef
+builder: quay.io/boson/faas-nodejs-builder:v0.8.3
+builderMap:
+  default: quay.io/boson/faas-nodejs-builder:v0.8.3
+volumes: []
+envs: []
+annotations: {}
+options: {}

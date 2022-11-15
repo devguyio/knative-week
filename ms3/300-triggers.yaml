@@ -1,0 +1,32 @@
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: analyzer
+  namespace: dev
+spec:
+  broker: issuesevents
+  filter:
+    attributes:
+      type: dev.knative.source.github.issue_comment
+  subscriber:
+    ref:
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      name: analyzer
+---
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: mailer
+  namespace: dev
+spec:
+  broker: issuesevents
+  filter:
+    attributes:
+      type: sentiment
+      sentiment: negative
+  subscriber:
+    ref:
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      name: mailer

@@ -1,0 +1,142 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-kafka-channel
+  namespace: knative-eventing
+data:
+  channelTemplateSpec: |
+    apiVersion: messaging.knative.dev/v1beta1
+    kind: KafkaChannel
+    spec:
+      numPartitions: 3
+      replicationFactor: 1    
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-br-defaults
+  namespace: knative-eventing
+  labels:
+    eventing.knative.dev/release: devel
+data:
+  default-br-config: |
+    clusterDefault:
+      brokerClass: MTChannelBasedBroker
+      apiVersion: v1
+      kind: ConfigMap
+      name: config-br-default-channel
+      namespace: knative-eventing
+    namespaceDefaults:
+      prod:
+        apiVersion: v1
+        kind: ConfigMap
+        name: config-kafka-channel
+        namespace: knative-eventing
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-br-defaults
+  namespace: knative-eventing
+  labels:
+    eventing.knative.dev/release: devel
+data:
+  default-br-config: |
+    clusterDefault:
+      brokerClass: MTChannelBasedBroker
+      apiVersion: v1
+      kind: ConfigMap
+      name: config-br-default-channel
+      namespace: knative-eventing
+    namespaceDefaults:
+      prod:
+        brokerClass: KafkaBroker
+
+---
+apiVersion: eventing.knative.dev/v1
+kind: Broker
+metadata:
+ name: default
+
+---
+
+
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: default-ch-webhook
+  namespace: knative-eventing
+data:
+  default-ch-config: |
+    clusterDefault:
+      apiVersion: messaging.knative.dev/v1
+      kind: InMemoryChannel
+    namespaceDefaults:
+      prod:
+        apiVersion: messaging.knative.dev/v1beta1
+        kind: KafkaChannel
+        spec:
+          numPartitions: 2
+          replicationFactor: 1
+
+---
+apiVersion: sources.knative.dev/v1alpha1
+kind: GitHubSource
+metadata:
+  name: endgame
+spec:
+  eventTypes:
+    - pull_request
+  ownerAndRepository: knweek/eventers_endgame
+  sink:
+    ref:
+      apiVersion: messaging.knative.dev/v1
+      kind: InMemoryChannelmetadata
+      name: testchan
+      namespace: demo
+
+
+
+---
+status:
+  address:
+    url: http://testchan-kn-channel.default.svc.cluster.local
+
+
+---
+apiVersion: messaging.knative.dev/v1
+kind: InMemoryChannel
+metadata:
+  name: testchan
+  namespace: default
+spec: {}
+status:
+  address:
+    url: http://testchan-kn-channel.default.svc.cluster.local
+  conditions:
+  - lastTransitionTime: "2021-07-29T21:30:32Z"
+    status: "True"
+    type: Addressable
+  - lastTransitionTime: "2021-07-29T21:30:32Z"
+    status: "True"
+    type: ChannelServiceReady
+  - lastTransitionTime: "2021-07-29T21:30:32Z"
+    status: "True"
+    type: DispatcherReady
+  - lastTransitionTime: "2021-07-29T21:30:32Z"
+    status: "True"
+    type: EndpointsReady
+  - lastTransitionTime: "2021-07-29T21:30:32Z"
+    status: "True"
+    type: Ready
+  - lastTransitionTime: "2021-07-29T21:30:32Z"
+    status: "True"
+    type: ServiceReady
+  observedGeneration: 1
+
+
+
+
+
+

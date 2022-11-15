@@ -1,0 +1,25 @@
+
+apiVersion: sources.knative.dev/v1alpha1
+kind: GitHubSource
+metadata:
+  name: endgamesource
+  namespace: integration
+spec:
+  eventTypes:
+    - pull_request
+    - issue_comment
+  ownerAndRepository: knweek/eventers_endgame
+  accessToken:
+    secretKeyRef:
+      name: githubsecret
+      key: accessToken
+  secretToken:
+    secretKeyRef:
+      name: githubsecret
+      key: secretToken
+  sink:
+    ref:
+      apiVersion: messaging.knative.dev/v1
+      kind: Channel
+      name: issuesevents
+      namespace: dev
